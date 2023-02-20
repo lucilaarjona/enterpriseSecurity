@@ -29,7 +29,39 @@ Los sistemas IAM, como base, proporcionan:
 - Single sign-on (SSO): permite a los usuarios autenticarse utilizando las credenciales “federadas” en un único portal (por ejemplo: Google o Facebook). De esta manera, no es necesario que el usuario se registre nuevamente con un usuario y contraseña.
 - Autenticación de múltiples factores (MFA): en una era en la que las contraseñas a menudo son robadas, el requisito de una prueba de identidad adicional es el nuevo estándar. La autenticación a través de huellas dactilares y las contraseñas de un solo uso son ejemplos de métodos de autenticación comunes.
 
+### Clientes de reinos de Keycloak
 
+Son las entidades que pueden solicitar a Keycloak la autenticación de un usuario. Generalmente, son aplicaciones y/o servicios que necesitan autenticar vía single sign-on.
+También pueden ser entidades que requieren información del usuario autenticado previamente o un token relacionado con ellos para poder invocar a otros servicios de la solución que también usen KeyCloak.
+
+Para crear un cliente dentro de la opción de “**Clients**” seleccionamos el ícono de “**Create**” y dentro de la opción “**Root URL**” especiﬁcamos la URL root de nuestra aplicación o servicio.
+
+<img src="./img/ClientesKeycloak/1.png" alt="700" width="700"/>
+
+Luego debemos hacer que nuestro cliente sea de acceso conﬁdencial para que cada API o servicio que lo requiera deba tener una clave y una contraseña como **secret** para poder acceder a estos servicios de Keycloak.Con esta opción habilitada tendremos que indicar que la característica “**Authorization Enabled**” esté habilitada.
+
+<img src="./img/ClientesKeycloak/2.png" alt="700" width="700"/>
+
+Luego de seleccionar la opción “**Save**”, en la solapa de “**Credentials**”, podremos visualizar el secret a utilizar para conectarnos como clientes de Keycloak desde nuestro microservicio que desea autenticar a un usuario. En este caso, sería: “**jVgqbVwgkG2f9dWkEWI670uUGj4DTMo9**”.
+
+<img src="./img/ClientesKeycloak/3.png" alt="700" width="700"/>
+
+#### Crear un usuario
+
+Para crear un usuario, debemos ir la opción de “**Manage > Users**” y hacer clic en el botón “**Add user**”.
+
+<img src="./img/ClientesKeycloak/4.png" alt="700" width="700"/>
+
+Completamos los datos de usuario y lo dejamos, en esta instancia, sin grupo
+
+<img src="./img/ClientesKeycloak/5.png" alt="700" width="700"/>
+
+Luego de guardarlo, vamos a ir a la opción de “**Credentials**” para asignarle una contraseña.
+
+<img src="./img/ClientesKeycloak/6.png" alt="700" width="700"/>
+
+Si queremos revisar nuestra conﬁguración en formato JSON, podemos ingresar en la siguiente URL:
+**http://localhost:9091/realms/{nombre-realm}/.well-known/openid-conﬁguration**
 
 ## Introducción a Keycloak
 ## Consola de administración
