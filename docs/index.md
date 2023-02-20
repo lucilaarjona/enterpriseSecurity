@@ -149,9 +149,11 @@ Utilizar un administrador de acceso e identidades (IAM) permite que los desarrol
 
 ## Ejercitemos lo aprendido
 
-<img src="./img/Ejercitemos-lo-aprendido.png.png" alt="700" width="700"/>
+<img src="./img/Ejercitemos-lo-aprendido.png" alt="700" width="700"/>
 
 http://localhost:8080/realms/dh/protocol/openid-connect/auth?client_id=oidc-postman&response_type=code&redirect_uri=http://localhost:8082/&scope=openid
+
+URL: http://localhost:8080/ | https://askcodes.net/coding/how-to-pass-arguments-to-entrypoint-in-docker-compose-yml
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
