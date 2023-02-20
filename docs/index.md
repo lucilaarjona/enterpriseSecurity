@@ -62,11 +62,11 @@ Luego de guardarlo, vamos a ir a la opción de “**Credentials**” para asigna
 
 **http://localhost:9091/realms/{nombre-realm}/.well-known/openid-conﬁguration**
 
-## Introducción a Keycloak
+### Introducción a Keycloak
 
 **¿Qué es Keycloak?** Keycloak es una herramienta de gestión de identidad y acceso de código abierto que se centra en aplicaciones modernas, como SPA (single page application), aplicaciones móviles o API REST. Se utiliza en producción para escenarios que van desde pequeños sitios web con solo un puñado de usuarios hasta grandes empresas con millones de usuarios.
 
-### Características de Keycloak
+#### Características de Keycloak
 
 <img src="./img/caracteristicas-de-keycloack.png" alt="700" width="700"/>
 
@@ -91,17 +91,19 @@ Ejecutando Keycloak con Docker
 
     docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
 
+(agregar sudo en ubuntu)
+
 El comando de arriba nos permite ejecutar keycloak en un contenedor, en donde además indicamos que queremos exponer el puerto 8080, y configuramos las credenciales para el usuario administrador.
 
 Listo, ahora podemos acceder a http://localhost:8080 para verificar su ejecución.
 
-## Consola de administración
+### Consola de administración
 
 La consola de administración de Keycloak nos proporciona una interfaz para administradores y desarrolladores que quieran configurar y administrar Keycloak. Para acceder a la consola nos dirigimos a http://localhost:8080/admin/ y nos autenticamos. Una vez autenticados, podemos ver la configuración.
 
 <img src="./img/consola-keycloak.png" alt="700" width="700"/>
 
-## Creando y configurando un realm
+### Creando y configurando un realm
 
 Un realm (o reino) es un concepto que en Keycloak refiere a un objeto que administra un conjunto de usuarios junto con sus credenciales, roles y grupos. Un usuario en Keycloak pertenece a un solo reino.
 Lo primero que tenemos que hacer es crear un reino para nuestra aplicación, los reinos nos permiten utilizar el servidor de Keycloak para múltiples aplicaciones, esto nos permite por ejemplo que cada aplicación tenga la configuración y su base de datos independiente del resto.
@@ -115,7 +117,7 @@ Lo primero que tenemos que hacer es crear un reino para nuestra aplicación, los
 
 <img src="./img/creando-un-reino/2.png" alt="700" width="700"/>
 
-## Exportar/Importar configuraciones en Keycloak
+### Exportar/Importar configuraciones en Keycloak
 
 Al trabajar de forma local con Keycloak puede ocurrir que necesitemos guardar la configuración de nuestro reino para poder utilizarla en otra computadora o, también, en el caso de que nuestra configuración se pierda y debamos realizarla desde cero. Keycloak nos permite importar y exportar nuestras configuraciones en archivos JSON.
 
@@ -147,13 +149,21 @@ Una vez seleccionadas las opciones que queremos, hacemos clic en el botón “Im
 
 Utilizar un administrador de acceso e identidades (IAM) permite que los desarrolladores se enfoquen en las reglas de negocio, al delegar los aspectos de seguridad de la autenticación y autorización. A su vez, una herramienta como Keycloak nos brinda la seguridad de que estamos utilizando una solución probada en producción a gran escala y nos evita el riesgo de implementar una solución propia que podría eventualmente fallar.
 
-## Ejercitemos lo aprendido
+### Ejercitemos lo aprendido
 
 <img src="./img/Ejercitemos-lo-aprendido.png" alt="700" width="700"/>
 
 http://localhost:8080/realms/dh/protocol/openid-connect/auth?client_id=oidc-postman&response_type=code&redirect_uri=http://localhost:8082/&scope=openid
 
+    docker-compose up
+
 URL: http://localhost:8080/ | https://askcodes.net/coding/how-to-pass-arguments-to-entrypoint-in-docker-compose-yml
+
+## Estándares de Autenticación y Autorización
+
+
+
+***
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
