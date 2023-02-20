@@ -60,18 +60,96 @@ Luego de guardarlo, vamos a ir a la opción de “**Credentials**” para asigna
 
 <img src="./img/ClientesKeycloak/6.png" alt="700" width="700"/>
 
-Si queremos revisar nuestra conﬁguración en formato JSON, podemos ingresar en la siguiente URL:
 **http://localhost:9091/realms/{nombre-realm}/.well-known/openid-conﬁguration**
 
 ## Introducción a Keycloak
+
+**¿Qué es Keycloak?** Keycloak es una herramienta de gestión de identidad y acceso de código abierto que se centra en aplicaciones modernas, como SPA (single page application), aplicaciones móviles o API REST. Se utiliza en producción para escenarios que van desde pequeños sitios web con solo un puñado de usuarios hasta grandes empresas con millones de usuarios.
+
+### Características de Keycloak
+
+<img src="./img/caracteristicas-de-keycloack.png" alt="700" width="700"/>
+
+* Permite integrar páginas de inicio de sesión totalmente personalizables en nuestras aplicaciones. Así como varios flujos, por ejemplo, la recuperación de contraseñas. Todo esto sin necesidad de agregar código.
+* Al delegar el proceso de autenticación a Keyclock, nuestras aplicaciones no necesitan preocuparse por los mecanismos de autenticación o sobre cómo almacenar las contraseñas de manera segura.
+* Permite a los usuarios acceder a múltiples aplicaciones autenticándose una única vez gracias al mecanismo de autenticación conocido como single sign-on (inicio de sesión único). También permite gestionar las sesiones: tanto los usuarios finales como los administradores tienen visibilidad completa de dónde están autenticados y pueden finalizar la sesión de forma remota cuando sea necesario.
+* Keycloak viene con su propia base de datos de usuarios, lo que hace que sea fácil de comenzar a utilizar.
+* Permite configurar la conexión con otra base de datos, ya sea una existente o una nueva.
+* Es una solución ligera y fácil de instalar. Es altamente escalable y proporciona alta disponibilidad.
+
+### Instalación y ejecución de Keycloak
+
+Keycloak proporciona varias opciones de instalación. Algunas de ellas son:
+
+* Ejecutándolo como un contenedor de Docker.
+* Instalándolo y ejecutándolo localmente utilizando Java.
+* Ejecutándolo con Kubernetes.
+
+Nosotros vamos a utilizar Docker para ejecutarlo, ya que consideramos que es la opción más simple.
+
+Ejecutando Keycloak con Docker
+
+    docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+
+El comando de arriba nos permite ejecutar keycloak en un contenedor, en donde además indicamos que queremos exponer el puerto 8080, y configuramos las credenciales para el usuario administrador.
+
+Listo, ahora podemos acceder a http://localhost:8080 para verificar su ejecución.
+
 ## Consola de administración
+
+La consola de administración de Keycloak nos proporciona una interfaz para administradores y desarrolladores que quieran configurar y administrar Keycloak. Para acceder a la consola nos dirigimos a http://localhost:8080/admin/ y nos autenticamos. Una vez autenticados, podemos ver la configuración.
+
+<img src="./img/consola-keycloak.png" alt="700" width="700"/>
+
 ## Creando y configurando un realm
+
+Un realm (o reino) es un concepto que en Keycloak refiere a un objeto que administra un conjunto de usuarios junto con sus credenciales, roles y grupos. Un usuario en Keycloak pertenece a un solo reino.
+Lo primero que tenemos que hacer es crear un reino para nuestra aplicación, los reinos nos permiten utilizar el servidor de Keycloak para múltiples aplicaciones, esto nos permite por ejemplo que cada aplicación tenga la configuración y su base de datos independiente del resto.
+
+### ¿Cómo creamos un reino?
+1. Apoyando el mouse sobre “Master” aparece el botón “Add realm”.
+
+<img src="./img/creando-un-reino/1.png" alt="700" width="700"/>
+
+2. Luego indicamos un nombre y clickeamos en “**Create**”.
+
+<img src="./img/creando-un-reino/2.png" alt="700" width="700"/>
+
 ## Exportar/Importar configuraciones en Keycloak
 
+Al trabajar de forma local con Keycloak puede ocurrir que necesitemos guardar la configuración de nuestro reino para poder utilizarla en otra computadora o, también, en el caso de que nuestra configuración se pierda y debamos realizarla desde cero. Keycloak nos permite importar y exportar nuestras configuraciones en archivos JSON.
 
+Para exportar vamos al submenú “Export” en el menú a la izquierda de la consola de administración. Para crear el archivo de conﬁguración solamente tenemos que hacer clic en el botón “Export”.
+Opcionalmente, podemos añadir a este archivo la conﬁguración de clientes, roles y grupos que hayamos creado (esto puede aumentar signiﬁcativamente el tamaño del archivo dependiendo de la cantidad que hayamos conﬁgurado).
 
+<img src="./img/exportar-importar-config/1.png" alt="700" width="700"/>
 
-docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:18.0.0 start-dev
+Para importar tenemos dos opciones. Si tenemos que crear el reino nuevamente, podemos simplemente utilizar el archivo al hacerlo. Cuando vimos cómo crear un reino, haciendo clic en el botón “Add realm”, pudimos observar que existe la opción “Import”.
+Luego, haciendo clic en “Select ﬁle” podemos buscar el archivo JSON que queremos utilizar y luego hacer clic en “Create”. El nuevo reino se creará con el mismo nombre y conﬁguración que tenga el archivo.
+
+<img src="./img/exportar-importar-config/2.png" alt="700" width="700"/>
+
+La otra opción es para el caso en que hayamos creado el reino, pero necesitamos importar su conﬁguración. Para esto, vamos al submenú “Import” en el menú a la izquierda de la consola de administración. Aquí tendremos que hacer clic en el botón “Select ﬁle”.
+
+<img src="./img/exportar-importar-config/3.png" alt="700" width="700"/>
+
+Buscamos el archivo JSON de conﬁguración que queremos añadir y lo seleccionamos. Allí podremos:
+* Ver el detalle del archivo haciendo clic en “View Details”.
+* Limpiar la selección del archivo haciendo clic en “Clear import”.
+* Podremos elegir si queremos importar los clientes, roles de cliente o roles de usuario que contenga el archivo. Entre paréntesis, podemos ver el detalle de la cantidad que posee el archivo de cada uno.
+* Por último, la opción “If a resource exists”, nos permite seleccionar qué acción debe tomar Keycloak en el caso de que se esté por importar un recurso que ya exista en nuestro entorno. Tenemos tres opciones: “Fail” lanzará un error detallando que el recurso ya existe, “Skip” ignorará los conﬂictos que existan y “Overwrite” sobreescribirá cualquier recurso que ya exista con el que estemos importando.
+
+<img src="./img/exportar-importar-config/4.png" alt="700" width="700"/>
+
+Una vez seleccionadas las opciones que queremos, hacemos clic en el botón “Import” y podremos ver un detalle de los cambios que fueron realizados.
+
+<img src="./img/exportar-importar-config/5.png" alt="700" width="700"/>
+
+Utilizar un administrador de acceso e identidades (IAM) permite que los desarrolladores se enfoquen en las reglas de negocio, al delegar los aspectos de seguridad de la autenticación y autorización. A su vez, una herramienta como Keycloak nos brinda la seguridad de que estamos utilizando una solución probada en producción a gran escala y nos evita el riesgo de implementar una solución propia que podría eventualmente fallar.
+
+## Ejercitemos lo aprendido
+
+<img src="./img/Ejercitemos-lo-aprendido.png.png" alt="700" width="700"/>
 
 http://localhost:8080/realms/dh/protocol/openid-connect/auth?client_id=oidc-postman&response_type=code&redirect_uri=http://localhost:8082/&scope=openid
 
