@@ -160,6 +160,24 @@ http://localhost:8080/realms/dh/protocol/openid-connect/auth?client_id=oidc-post
 URL: http://localhost:8080/ | https://askcodes.net/coding/how-to-pass-arguments-to-entrypoint-in-docker-compose-yml
 
 ## Estándares de Autenticación y Autorización
+### Introducción a estándares
+<img src="./img/Introduccion-a-estandares.png" alt="700" width="700"/>
+
+### OAuth 2.0
+### OpenID Connect (OIDC)
+### Json Web Token (JWT)
+### OIDC Discovery
+### Autenticación de un usuario
+### Análisis de un ID token
+### Refresh token
+### Modificación del perfil de usuario
+### Agregar roles al ID token
+### Resumen
+
+
+
+
+
 
 
 
