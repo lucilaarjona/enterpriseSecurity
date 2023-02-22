@@ -420,6 +420,182 @@ El proceso de cerrar una sesión consiste, simplemente, en invalidar todos los t
 
 ### Resumen
 
+#### OAuth 2.0
+
+OAuth 2.0 es un estándar abierto para la autorización de APIs que nos permite compartir información con otras aplicaciones sin tener que compartir los datos del usuario. Actualmente, es utilizado por grandes empresas, como Google, Facebook, Twitter, entre otras.
+
+**¿Qué problema resuelve?**
+Pensemos en la siguiente situación: si tenemos un back end que expone una API y un front end que la consume, en principio no tenemos grandes problemas para gestionar los usuarios y sus credenciales, ya que somos dueños del 100% del sistema. Sin embargo, llega un momento en el que queremos agregar una funcionalidad que dependa de un tercero, por ejemplo, que nuestra aplicación escriba y publique contenido en la cuenta de Twitter de los usuarios. Para hacer esto, deberíamos pedirle el nombre de usuario y contraseña... Pensemos, ¿quién nos daría esta información? Nadie.
+Con OAuth 2.0, el usuario puede autorizar a nuestra aplicación a publicar contenido en Twitter sin tener que compartir su contraseña.
+
+**¿Cómo lo hace?**
+OAuth 2.0 permite al cliente solicitar acceso a recursos con la aprobación del usuario mediante la generación de un token de acceso. De este modo, OAuth 2.0 permite que una aplicación acceda a recursos proporcionados por otra aplicación, sin solicitar el nombre de usuario y la contraseña del usuario.
+
+<img src="./img/como-lo-hace.png" alt="700" width="700"/>
+
+Mediante la generación de un token de acceso —una cadena que denota un ámbito específico, un tiempo de vida y otros atributos de acceso—, OAuth 2.0 permite al cliente solicitar acceso a recursos controlados por el propietario del recurso y alojados por el servidor de recursos, y recibir un conjunto diferente de credenciales del propietario del recurso. Los tokens de acceso son emitidos a los clientes de terceros por un servidor de autorización con la aprobación del propietario del recurso. El cliente utiliza el token de acceso para acceder a los recursos protegidos alojados en el servidor de recur Es un recurso muy presente en nuestro día a día. Posiblemente, ustedes (propietarios del recurso) han accedido a una aplicación (cliente) en la que le han concedido acceso a la información existente en otra aplicación (servidor de recursos), sin que esta nueva aplicación a la que ha accedido recientemente pueda ver toda la información, solo aquella a la que ustedes le han permitido acceder. Se autentifican directamente con un servidor de confianza del servicio (servidor de autorización), que emite las credenciales específicas de la delegación del servicio (token de acceso).
+
+De este modo, OAuth 2.0 permite que una aplicación acceda a recursos proporcionados por otra aplicación sin solicitar el nombre y la contraseña del usuario.
+
+#### OpenID Connect
+
+Como vimos, con OAuth 2.0 realizamos el proceso de autorización que se realiza gracias a la incorporación de OpenID Connect, lo que permite llevar a cabo un inicio de sesión único mediante OAuth. OpenID Connect introduce el concepto de token ID. Este es un token de seguridad que permite al cliente verificar la identidad del usuario. El token ID también obtiene información básica del perfil del usuario.
+
+#### OpenID Connect Discovery
+
+Entonces, OpenID Connect es una simple capa de identidad que se coloca sobre el protocolo OAuth 2.0 y permite a los clientes verificar la identidad del usuario final basándose en la autenticación realizada por un servidor de autorización. Además, permite obtener información de perfil básica sobre el usuario final de una manera interoperable, tipo REST. Esta especificación define un mecanismo para que un tercero de confianza de OpenID Connect descubra el proveedor de OpenID del usuario final y obtenga la información necesaria para interactuar con él, incluyendo sus endpoints de OAuth 2.0. En este punto, entra en juego un servicio de OpenID Connect: Discovery. Este facilita el cambio entre diferentes proveedores de OpenID.
+
+## Estrategias de Autorización Avanzadas
+### Introducción
+En esta clase vamos a ver un tema que es esencial para la seguridad de cualquier sistema: los mecanismos de control de acceso. Estos se pueden definir como un componente lógico que sirve para capturar una solicitud de acceso (de un usuario/cliente), tomar una decisión y verificar que esa decisión de acceso se cumpla.
+
+Existen diversas estrategias (cada una con sus puntos fuertes y débiles), pero no se puede decir que una sea superadora por sobre otra, sino que son distintos enfoques que —muy a menudo— se usan en forma conjunta para enfrentar escenarios complejos.
+
+Conocer y comprender estos métodos y sus características es un buen punto de partida para aplicarlos en distintos casos de uso de forma eficaz y costo-eficiente.
+
+Las estrategias de control de acceso sobre las cuales estaremos aprendiendo son:
+
+    RBAC (role-based access control)
+    ABAC (attribute-based access control)
+    Scopes de OAuth 2.0
+    GBAC (group-based access control)
+
+### RBAC (role-based access control)
+
+ Tradicionalmente, para garantizar la seguridad, el control de acceso se gestionaba de forma individual mediante listas de control de acceso (ACL o access control list). El problema de este tipo de mecanismo es que tanto el costo de mantenimiento como el número de errores de gestión aumentan a medida que crece el número de usuarios a gestionar.
+
+El control de acceso basado en roles (de ahora en adelante, RBAC, y también conocido como seguridad basada en roles) es un mecanismo de control de acceso que define los roles y asigna permisos a los usuarios finales para determinar si se le debe dar acceso a un recurso.
+
+El aprovisionamiento u otorgamiento de acceso de usuarios se basa en las necesidades de un grupo dentro de la compañía u organización y en función de responsabilidades y necesidades comunes. Esto significa que los roles se definen en función de características propias de la organización, como la ubicación, el departamento, la antigüedad o las funciones del usuario. Por otro lado, los permisos se asignan según el acceso (lo que el usuario puede ver), las operaciones (lo que el usuario puede hacer) y las sesiones (cuánto tiempo puede hacerlo el usuario).
+
+Vamos a ver 3 reglas fundamentales por las cuales se rige el RBAC:
+
+* Asignación de roles: un usuario solo puede ejercer privilegios si se le ha asignado un rol.
+* Autorización basada en roles: dicho rol del usuario debe estar autorizado, lo que garantiza que los usuarios solo puedan asumir roles para los que están autorizados.
+* Autorización de privilegios: un usuario puede ejercer ciertos privilegios si, por supuesto, está autorizado para hacerlo.
+
+Por otro lado, el RBAC tiene objetivos, funciones para las cuales está diseñado y orientado.
+
+<img src="./img/funciones-rbac.png" alt="700" width="700"/>
+
+<img src="./img/rbac-mesa-de-trabajo.png" alt="700" width="700"/>
+
+
+Todas estas características hacen del RBAC muy popular en grandes organizaciones que necesitan otorgar acceso a cientos o miles de empleados. Pero también es cada vez más popular entre las organizaciones más pequeñas, ya que a menudo es más fácil de administrar que las listas de control de acceso.
+
+**¿Y cómo hace Keycloak para poner en juego este mecanismo de seguridad?**
+
+<img src="./img/tipos-de-roles-keycloak.jpg" alt="700" width="700"/>
+
+### ABAC (attribute-based access control)
+
+A diferencia de RBAC, en un sistema de control de acceso basado en atributos (ABAC), cualquier tipo de atributo —como los atributos de usuario y los atributos de recursos— se utilizan para determinar el acceso. Estos atributos se comparan con valores estáticos definidos o incluso con otros atributos, lo que lo convierte en un control de acceso basado en relaciones. Los atributos vienen en pares clave-valor (como "Rol = Supervisor"), que se pueden usar para limitar el acceso a una determinada característica de un sistema. Es decir, que este tipo de control utiliza los atributos que contiene el token e información sobre el contexto de autorización para conceder acceso a los recursos. Es probablemente el mecanismo de control más flexible y soporta de forma natural la autorización de accesos de granularidad fina.
+
+<img src="./img/texto-intro-abac.png" alt="700" width="700"/>
+
+Como ya vimos, la autorización a partir de tokens se basa en realizar una introspección de los mismos y utilizar la información que contienen para así permitir el acceso a los recursos. Esta información se representa como un set de atributos, o claims, y son sus valores los que verificaremos para conceder el acceso.
+
+**Roles dentro de Keycloak**
+
+<img src="./img/roles-dentro-keycloak.png" alt="700" width="700"/>
+
+[ABAC (attribute-based access control)](https://www.keycloak.org/docs/latest/server_admin/#_protocol-mappers)
+
+### OAuth 2.0 scopes
+
+Keycloak es, fundamentalmente, un servidor de autorización basado en OAuth 2.0. A OAuth 2.0 ya lo conocemos y lo revisamos a fondo en clases pasadas, pero repasemos un aspecto importante. En OAuth hay dos tipos de aplicaciones: clientes y servidores de recursos. Vimos también que los tokens se generan para que los clientes puedan actuar en nombre de un usuario y están limitados al alcance (scope) al que el usuario otorgue su consentimiento. Por otro lado, los servidores de recursos son los que, basándose en ese token, deciden si un cliente puede acceder a un recurso protegido.
+
+¿Pero qué es el scope? Es el alcance de la autorización y se usa para restringir el acceso a los recursos. Cuando se solicita un access token del servidor de autorizaciones, la aplicación cliente incluirá un scope como parámetro de la petición, especificando una lista de scopes (alcances) o determinados accesos a los recursos del usuario, que el token generado debe tener.
+
+<img src="./img/texto-intro-oauth.jpg" alt="700" width="700"/>
+
+Por defecto, los clientes en Keycloak no están configurados para pedir consentimiento del usuario. Esto sucede porque usualmente se emplea dentro de un ámbito empresarial, donde los clientes se encuentran dentro de los límites de la organización y los recursos a los cuales se puede acceder no requieren del consentimiento del usuario. En su lugar, requieren de un permiso de acceso que se define de acuerdo a roles, atributos específicos de un usuario o incluso grupos de usuarios (como veremos más adelante).
+
+La autorización mediante los scopes de OAuth 2.0 se basa solamente en el consentimiento del usuario. Es una mejor estrategia a la hora de integrar servicios de terceros en nuestra aplicación y, en este caso, el usuario tendrá la decisión a la hora de autorizar a una aplicación de terceros a acceder a sus recursos. Para implementar esta estrategia se deberá poner énfasis en proteger la información de los usuarios. Debemos entender que esta estrategia de autorización se enfoca en proteger a los recursos de otros clientes (aplicaciones o servicios). Esto difiere de las estrategias que vimos anteriormente, como RBAC, en la cual se protege a los recursos de los usuarios.
+
+### GBAC (group-based access control)
+
+Keycloak nos permite administrar grupos (groups) dentro de nuestro reino. Los usuarios pueden formar parte de un group ya sea para representar su función dentro de una unidad de negocio de la organización o para agruparlos de acuerdo a los roles que cumplen dentro del contexto de nuestra aplicación —como podría ser, por ejemplo, un grupo de usuarios administradores—. Aquí entra en juego GBAC, asignando roles a los groups. De esta manera, Keycloak hace mucho más fácil la tarea de administrar roles comunes para múltiples usuarios sin obligarnos a otorgar o revocar roles a cada usuario de forma individual dentro del reino.
+
+Los groups dentro de Keycloak son jerárquicos y, cuando se emiten los tokens, se puede atravesar esta jerarquía observando el path del group. Supongamos un ejemplo: tenemos un group de recursos humanos llamado “human resource”. Como hijo de este group, tenemos un grupo de administradores llamado “manager”. Cuando Keycloak almacena información sobre groups dentro de los tokens, la información debería llegar en el siguiente formato: /human resource/manager. Esta información estará disponible para cada token emitido por el servidor, donde el sujeto (usuario) sea miembro del group.
+
+A diferencia de los roles, la información sobre el group no se incluye de forma automática dentro de los tokens, sino que debemos asociar un protocolo de mapeo al client (o un client scope con el mismo mapeo).
+
+#### Mapear membresías de groups dentro del token
+
+Empecemos creando un cliente con “client id: myclient”. Luego, creamos un usuario en
+Keycloak, por ejemplo, un usuario con “username: Carlos”. Una vez tenemos estos datos,
+navegamos al client myclient y hacemos clic en la pestaña “Mappers”. En esta pestaña,
+crearemos un mapper haciendo clic en el botón “Create”.
+
+En esta página crearemos un mapper con los siguientes atributos:
+
+    ■ Name: groups
+    ■ Mapper Type: Group Membership
+    ■ Token Claim Name: groups
+
+<img src="./img/mapear-memebresia/1.png" alt="700" width="700"/>
+
+Hacemos clic en el botón “Save” y se creará nuestro mapper para el client myclient.
+
+<img src="./img/mapear-memebresia/2.png" alt="700" width="700"/>
+
+Ahora debemos crear un grupo para este usuario. Para eso hacemos clic en el link “Groups”.
+
+<img src="./img/mapear-memebresia/3.png" alt="700" width="700"/>
+
+Luego, hacemos clic en “New” y crearemos un grupo que se llamará “Project Management
+Office”. Escribimos el nombre dentro de “Name” y hacemos clic en “Save”.
+
+<img src="./img/mapear-memebresia/4.png" alt="700" width="700"/>
+
+Ahora debemos añadir a Carlos al grupo, para esto vamos a la página de usuarios y, en el detalle del usuario, vamos a la pestaña “Groups”.
+
+<img src="./img/mapear-memebresia/5.png" alt="700" width="700"/>
+
+Para ingresar al grupo hacemos clic en el nombre del grupo en el recuadro “Available Groups” y luego en “Join”. Ahora, el grupo nos deberá aparecer dentro de “Group Membership”.
+
+<img src="./img/mapear-memebresia/6.png" alt="700" width="700"/>
+
+El usuario Carlos es ahora miembro del grupo Project Management Office. Volvamos a la pantalla del client, dentro de la pestaña “Client Scopes” vamos al apartado “Evaluate”. Una vez allí, donde dice “user”, escribimos el nombre del usuario y lo seleccionamos.
+
+<img src="./img/mapear-memebresia/7.png" alt="700" width="700"/>
+
+Una vez tenemos el usuario, hacemos clic en el botón “Evaluate” y veremos lo siguiente:
+
+<img src="./img/mapear-memebresia/8.png" alt="700" width="700"/>
+
+Hacemos clic en la pestaña “Generated Access Token” para ver que nuestro token posea la información sobre el grupo del usuario.
+
+<img src="./img/mapear-memebresia/9.png" alt="700" width="700"/>
+
+Como se puede observar, se tiene el atributo “groups”:[ “/Project Management Office” ], indicándonos que nuestro token ahora devuelve la información sobre los grupos a los que pertenece un usuario.
+
+### Resumen
+
+En esta clase pudimos hacer un breve recorrido por algunas de las estrategias de control de acceso más importantes y probadas en la industria. Podemos reflexionar, entonces, sobre la importancia de estos mecanismos para reforzar políticas de acceso (autorizar la obtención de recursos sobre la base de reglas que nosotros definamos) y hacer que nuestro sistema tenga una defensa más robusta frente a usuarios no autorizados que intenten realizar acciones indebidas o que pongan en riesgo la seguridad de nuestra aplicación.
+
+Aprovechando la autorización mediante token, las aplicaciones pueden ser capaces de inspeccionar dichos tokens (ya sea localmente o mediante el endpoint de inspección) y usar sus claims para implementar esos diversos mecanismos de control de acceso —como RBAC, GBAC o ABAC—, o utilizar los scopes otorgados por el usuario a través de una aplicación client que actúa en su nombre. También tuvimos la oportunidad de ver que Keycloak puede ser utilizado como un servicio de autenticación centralizado que nos permitirá desacoplar la autorización de las aplicaciones, donde las decisiones de acceso son tomadas por Keycloak basándose en los recursos, políticas y reglas administradas a través del servidor.
+
+Por último, te proponemos un tutorial sobre la configuración de grupos en Keycloak. De esta manera, vas a poder ver la puesta en escena de una de las estrategias vistas en clase que nos permitirá repasar la lógica por detrás de la misma. En el siguiente enlace, podrás descargar el código utilizado en el video.
+
+## Tokens y sesiones
+
+### Introducción
+### Introdcción al manejo de sesioness
+### Tiempo de vida de una sesión
+### Ejercicio práctico con sesiones
+### Forzar expiración de una sesión
+### Gestión de tokens
+### Resumen
+### Ejercicio práctico integrador
+
+
+
+
+
+
+
 
 
 
@@ -431,7 +607,11 @@ El proceso de cerrar una sesión consiste, simplemente, en invalidar todos los t
 
 For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 
-<!-- <img src="./img/Screenshot from 2022-11-08 17-38-27.png" alt="700" width="700"/>
+<!--
+
+<img src="./img/Screenshot from 2022-11-08 17-38-27.png" alt="700" width="700"/>
+
+https://markdown.es/sintaxis-markdown/
 
 ## Commands
 
