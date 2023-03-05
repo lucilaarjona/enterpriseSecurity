@@ -577,12 +577,29 @@ En esta clase pudimos hacer un breve recorrido por algunas de las estrategias de
 
 Aprovechando la autorización mediante token, las aplicaciones pueden ser capaces de inspeccionar dichos tokens (ya sea localmente o mediante el endpoint de inspección) y usar sus claims para implementar esos diversos mecanismos de control de acceso —como RBAC, GBAC o ABAC—, o utilizar los scopes otorgados por el usuario a través de una aplicación client que actúa en su nombre. También tuvimos la oportunidad de ver que Keycloak puede ser utilizado como un servicio de autenticación centralizado que nos permitirá desacoplar la autorización de las aplicaciones, donde las decisiones de acceso son tomadas por Keycloak basándose en los recursos, políticas y reglas administradas a través del servidor.
 
-Por último, te proponemos un tutorial sobre la configuración de grupos en Keycloak. De esta manera, vas a poder ver la puesta en escena de una de las estrategias vistas en clase que nos permitirá repasar la lógica por detrás de la misma. En el siguiente enlace, podrás descargar el código utilizado en el video.
-
 ## Tokens y sesiones
-
 ### Introducción
-### Introdcción al manejo de sesioness
+
+Además de actuar como un servicio de autenticación y autorización, Keycloak es —en esencia— un sistema de gestión de tokens y sesiones.
+
+Como parte del proceso de autenticación, Keycloak puede crear sesiones del lado del servidor y correlacionarse con tokens. Con las sesiones, Keycloak puede mantener el estado del contexto de autenticación donde se originaron las sesiones, rastrear la actividad de los usuarios y clientes, verificar la validez de los tokens y decir cuándo los usuarios y clientes deben volver a autenticarse.
+
+### Introducción al manejo de sesiones
+
+<img src="./img/gestion-de-sesiones.png" alt="700" width="700"/>
+
+**Experiencia del usuario**
+
+Keycloak se basa en las sesiones para determinar si los usuarios y clientes están autenticados, durante cuánto tiempo deben estar autenticados y cuándo es el momento de volver a autenticarse. Esta característica de las sesiones es básicamente lo que brinda a los usuarios la experiencia de inicio de sesión único (single sign-on), ya que —al autenticarse— la sesión será válida para todos los clientes dentro del mismo reino.
+
+**Seguridad**
+
+Las sesiones brindan una capa de seguridad para rastrear y controlar la actividad del usuario y para asegurarse de que los tokens emitidos a los clientes sigan siendo válidos. También son importantes para limitar y controlar el tiempo que los usuarios podrán permanecer conectados a un reino.
+
+**Rendimiento**
+
+Las sesiones se guardan en la memoria y tienen un impacto directo en el rendimiento general de Keycloak. Este almacena sesiones en cachés, donde la cantidad de sesiones activas y el tiempo que se mantienen vivas son factores clave que deben equilibrarse para optimizar la memoria y los recursos.
+
 ### Tiempo de vida de una sesión
 ### Ejercicio práctico con sesiones
 ### Forzar expiración de una sesión
