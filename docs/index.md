@@ -612,8 +612,8 @@ La duración de la sesión determina cuándo las sesiones deben caducar y destru
 
 En sesiones de usuario, para modificar la configuración por defecto, tenemos que entrar en el reino y luego en “Tokens”. En esa pestaña podemos ver los campos “SSO Session Idle” y “SSO Session Max”, en donde el primero corresponde al tiempo de inactividad que vamos a permitir antes de invalidar la sesión y el segundo corresponde al tiempo máximo de una sesión antes de invalidarla.
 
-<img src="./img/" alt="700" width="700"/>
-<img src="./img/creenshot from 2022-11-08 17-38-27.png" alt="700" width="700"/>
+<img src="./img/configurandoElTiempo/1.png" alt="700" width="700"/>
+<img src="./img/configurandoElTiempo/2.png" alt="700" width="700"/>
 
 ### Forzar expiración de una sesión
 ### Gestión de tokens
