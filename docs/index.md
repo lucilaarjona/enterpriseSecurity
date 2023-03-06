@@ -601,7 +601,20 @@ Las sesiones brindan una capa de seguridad para rastrear y controlar la activida
 Las sesiones se guardan en la memoria y tienen un impacto directo en el rendimiento general de Keycloak. Este almacena sesiones en cachés, donde la cantidad de sesiones activas y el tiempo que se mantienen vivas son factores clave que deben equilibrarse para optimizar la memoria y los recursos.
 
 ### Tiempo de vida de una sesión
-### Ejercicio práctico con sesiones
+
+Una de las preguntas clave que nos debemos hacer antes de pasar a producción con Keycloak es con qué frecuencia los usuarios y clientes deben volver a autenticarse.
+
+La duración de la sesión determina cuándo las sesiones deben caducar y destruirse. Una vez que expira, los usuarios y clientes asociados con estas sesiones ya no se encuentran autenticados y se ven obligados a volver a autenticarse para establecer una nueva sesión.
+
+<img src="./img/tiempo-vida-sesion.png" alt="700" width="700"/>
+
+### Configurando el tiempo de expiración y de inactividad
+
+En sesiones de usuario, para modificar la configuración por defecto, tenemos que entrar en el reino y luego en “Tokens”. En esa pestaña podemos ver los campos “SSO Session Idle” y “SSO Session Max”, en donde el primero corresponde al tiempo de inactividad que vamos a permitir antes de invalidar la sesión y el segundo corresponde al tiempo máximo de una sesión antes de invalidarla.
+
+<img src="./img/" alt="700" width="700"/>
+<img src="./img/creenshot from 2022-11-08 17-38-27.png" alt="700" width="700"/>
+
 ### Forzar expiración de una sesión
 ### Gestión de tokens
 ### Resumen
